@@ -11,11 +11,10 @@
 // TODO markers.
 //
 // Execute `rustlings hint cow1` or use the `hint` watch subcommand for a hint.
-
-// I AM NOT DONE
-
+ 
+ 
 use std::borrow::Cow;
-
+ 
 fn abs_all<'a, 'b>(input: &'a mut Cow<'b, [i32]>) -> &'a mut Cow<'b, [i32]> {
     for i in 0..input.len() {
         let v = input[i];
@@ -26,11 +25,11 @@ fn abs_all<'a, 'b>(input: &'a mut Cow<'b, [i32]>) -> &'a mut Cow<'b, [i32]> {
     }
     input
 }
-
+ 
 #[cfg(test)]
 mod tests {
     use super::*;
-
+ 
     #[test]
     fn reference_mutation() -> Result<(), &'static str> {
         // Clone occurs because `input` needs to be mutated.
@@ -41,7 +40,7 @@ mod tests {
             _ => Err("Expected owned value"),
         }
     }
-
+ 
     #[test]
     fn reference_no_mutation() -> Result<(), &'static str> {
         // No clone occurs because `input` doesn't need to be mutated.
@@ -49,9 +48,11 @@ mod tests {
         let mut input = Cow::from(&slice[..]);
         match abs_all(&mut input) {
             // TODO
+            Cow::Borrowed(_) => Ok(()),
+            _ => Err("Expected borrowed value"),
         }
     }
-
+ 
     #[test]
     fn owned_no_mutation() -> Result<(), &'static str> {
         // We can also pass `slice` without `&` so Cow owns it directly. In this
@@ -61,9 +62,11 @@ mod tests {
         let mut input = Cow::from(slice);
         match abs_all(&mut input) {
             // TODO
+            Cow::Owned(_) => Ok(()),
+            _ => Err("Expected owned value"),
         }
     }
-
+ 
     #[test]
     fn owned_mutation() -> Result<(), &'static str> {
         // Of course this is also the case if a mutation does occur. In this
@@ -73,6 +76,8 @@ mod tests {
         let mut input = Cow::from(slice);
         match abs_all(&mut input) {
             // TODO
+            Cow::Owned(_) => Ok(()),
+            _ => Err("Expected owned value"),
         }
     }
 }
